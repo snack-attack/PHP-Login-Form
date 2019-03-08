@@ -1,17 +1,24 @@
 <?php
 
-session_start();
+define('USERNAME', 'audrey');
+define('PASSWORD', '$2y$10$TdIbbxTzrqo.DIgWPHw7t.Q1ZDLzzxHwPw.RBhVHVuIxL/eKoCp3O');
 
-$username = $_POST['uname'];
-$password = $_POST['psw'];
+if(!empty($_POST['uname']) && !empty($_POST['psw'])) {
+    $username = $_POST['uname'];
+    $password = $_POST['psw'];
+    session_start();
 
-$hash = password_hash($password, PASSWORD_DEFAULT);
+    if($username == USERNAME && password_verify($password, PASSWORD)) {
+        $_SESSION['loggedIn'] = true;
 
-$_SESSION['username'] = $username;
-$_SESSION['password'] = $hash;
+        header('Location: account.php');
+    } else {
+        header('Location: index.html');
+    }
+    
+} else {
+    echo 'Username or password not provided.';
+};
 
-$correctLogin = password_verify($password, $hash);
-
-session_destroy();
 
 
